@@ -28,8 +28,8 @@
 
 Usage:
 
-    1. Open Spotify.
-    2. Right click the playlist to export, choose 'Copy HTTP Link'.
+    1. Open Spotify and select the songs to export.
+    2. Right click and choose 'Copy HTTP Link'.
     3. Paste into <listfile>.
     4. Run spotexp.py <listfile>.
 
@@ -66,15 +66,16 @@ def download(listfile):
 
         r, c = h.request(url, 'GET')
 
-        root = etree.HTML(c)
+        parser = etree.HTMLParser(encoding='UTF-8')
+        root = etree.HTML(c, parser = parser)
         title_node = root.xpath('//div[@id="metadata"]/h1[@id="title"]/a[@id="title"]')[0]
         artist_node = root.xpath('//div[@id="metadata"]/div[@id="artist"]/p[@class="meta-info"]/a')[0]
         album_node = root.xpath('//div[@id="metadata"]/div[@id="album"]/p[@class="meta-info"]/a')[0]
         title, artist, album = title_node.text, artist_node.text, album_node.text
 
-        print title
-        print artist
-        print album
+        print title.encode('UTF-8')
+        print artist.encode('UTF-8')
+        print album.encode('UTF-8')
 
 def usage():
     '''Echo usage and exit.'''
