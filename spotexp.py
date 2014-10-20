@@ -87,7 +87,7 @@ def download(listfile):
 
         # Print result.
         result = ';'.join([uri, title, time, artists, album])
-        print result
+        print result.encode('UTF-8')
 
 def usage():
     '''Echo usage and exit.'''
