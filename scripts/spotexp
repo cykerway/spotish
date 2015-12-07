@@ -1,9 +1,9 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # The MIT License (MIT)
 #
-# Copyright (c) 2012 Cyker Way
+# Copyright (c) 2012 - 2015 Cyker Way
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,26 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-'''Spotexp - Export playlists on Spotify.
+'''\
+SpotExp - Spotify playlist exporter.
 
 ----------------------------------------------------------------
 
 Usage:
 
-    1. Open Spotify and select the songs to export.
-    2. Right click and choose 'Copy HTTP Link'.
-    3. Paste into <listfile>.
-    4. Run spotexp.py <listfile>.
+1.  Open Spotify and select the songs to export.
+
+2.  Right click the selected songs and choose *Copy Track Link*.
+
+3.  Paste copied links into a text file named `listfile`.
+
+4.  Run `spotexp.py listfile`.
 
 ----------------------------------------------------------------
 
 Output format:
 
-    [uri];[title];[time];[artist1,artist2...];[album]
+    <title>:<artist>:<album>:<duration>
 '''
 
 import httplib2
@@ -53,55 +57,46 @@ def download(listfile):
     h = httplib2.Http()
 
     with open(listfile, 'rt') as f:
-        items = f.readline().split()
+        for line in f:
 
-    for item in items:
+            # url format: http://open.spotify.com/track/xxxxxxxxxxxxxxxxxxxxxx
+            url = line.strip()
 
-        # url format: http://open.spotify.com/track/xxxxxxxxxxxxxxxxxxxxxx
-        url = item.strip()
+            # uri format: xxxxxxxxxxxxxxxxxxxxxx
+            uri = url.split('/')[-1]
 
-        # uri format: xxxxxxxxxxxxxxxxxxxxxx
-        uri = url.split('/')[-1]
+            # Download and parse HTML page.
+            r, c = h.request(url, 'GET')
+            if (not r or r.get('status') != '200'):
+                print('HTTP error.')
+                exit(1)
 
-        # Download and parse HTML page.
-        r, c = h.request(url, 'GET')
-        root = etree.HTML(c)
+            root = etree.HTML(c)
 
-        # Get album.
-        album_node = root.xpath('//div[@class="h-data"]/h1[@class="h-title"]')[0]
-        album = album_node.text
+            # Get song metadata.
+            title = root.xpath('//meta[@property="og:title"]')[0].attrib['content']
+            artist = root.xpath('//a[@class="owner-name hdr-l"]')[0].text
+            album = root.xpath('//a[@class="owner-name hdr-l"]')[1].text
+            duration = root.xpath('//meta[@property="music:duration"]')[0].attrib['content']
 
-        song_node = root.xpath('//div/table/tbody/tr[@data-uri="spotify:track:{}"]'.format(uri))[0]
+            print(':'.join((title, artist, album, duration)), flush=True)
 
-        # Get title.
-        title_node = song_node.xpath('td/div/strong[@class="tl-name-name"]')[0]
-        title = title_node.text
-
-        # Get artists.
-        artists_node = song_node.xpath('td/div/div[@class="tl-name-more text-muted"]')[0]
-        artists = re.sub(r'\s*,\s*', ',', artists_node.text.strip())
-
-        # Get time.
-        time_node = song_node.xpath('td[@class="tl-cell tl-time"]/span')[0]
-        time = time_node.text
-
-        # Print result.
-        result = ';'.join([uri, title, time, artists, album])
-        print result.encode('UTF-8')
-
-def usage():
+def usage(code):
     '''Echo usage and exit.'''
 
-    print '''\
+    usage_str = \
+'''
 Spotexp - Export playlists on Spotify.
 
 Usage: spotexp.py <listfile>
 '''
-    exit(1)
+    print(usage_str)
+    exit(code)
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 2:
-        usage()
+    if len(sys.argv) != 2:
+        usage(1)
 
     download(sys.argv[1])
+

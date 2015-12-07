@@ -1,10 +1,16 @@
-# spotexp
+# SpotExp
 
-Spotify playlist exporter
+----
 
-Usage:
+SpotExp is a Spotify playlist exporter.
+
+## Usage
 
 1.  Open Spotify and select the songs to export.
-2.  Right click and choose 'Copy HTTP Link'.
-3.  Paste into &lt;listfile&gt;.
-4.  Run spotexp.py &lt;listfile&gt;.
+
+2.  Right click the selected songs and choose *Copy Track Link*.
+
+3.  Paste copied links into a text file named `listfile`.
+
+4.  Run `spotexp listfile`.
+
