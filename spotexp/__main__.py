@@ -97,12 +97,9 @@ def dump(infile, outdir):
 
             # Write track duration.
             duration_ms = track['duration_ms']
-            duration_hh = duration_ms // 3600000
-            duration_ms -= duration_hh * 3600000
-            duration_mm = duration_ms // 60000
-            duration_ms -= duration_mm * 60000
-            duration_ss = duration_ms // 1000
-            duration_ms -= duration_ss * 1000
+            duration_hh, duration_ms = divmod(duration_ms, 3600000)
+            duration_mm, duration_ms = divmod(duration_ms, 60000)
+            duration_ss, duration_ms = divmod(duration_ms, 1000)
             fout.write('duration:{:02d}:{:02d}:{:02d}.{:03d}\n'.format(
                 duration_hh, duration_mm, duration_ss, duration_ms
             ))
