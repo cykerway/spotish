@@ -4,33 +4,45 @@ spotexp
 
 .. default-role:: code
 
-`spotext` is a Spotify playlist exporter.
+`spotext` is a Spotify metadata exporter.
 
 Intro
 ================================================
 
-`spotext` is a Spotify playlist exporter.
+`spotext` is a Spotify metadata exporter.
 
 Usage
 ================================================
 
-1.  Open Spotify and select the songs to export.
+1.  Open Spotify and select tracks to export.
 
-2.  Right click the selected songs and choose *Copy Song Link*.
+2.  Right click selected tracks and click *Copy Spotify URI*. This will copy
+    Spotify URIs to clipboard.
 
-3.  Paste copied links into a text file named `songs.txt`.
+3.  Paste copied links into a text file.
 
-4.  Run `spotexp songs.txt`.
+4.  Run spotexp as follows:
+
+    ::
+
+        spotexp <infile> <outdir>
+
+    where:
+
+    -   `infile` is the text file created in the previous step.
+
+    -   `outdir` is the dir under which track metadata are written.
 
 Output
 ================================================
 
-`spotext` will write, for each song, the following information to standard
-output:
+`spotext` creates a subdir for each track and writes the following files in it:
 
-::
+-   `track.json`: Track metadata in JSON format.
 
-    <title>:<artist>:<album>:<duration>
+-   `track.txt`: Simplified track metadata in TXT format.
+
+-   `album.jpg`: Album cover.
 
 Install
 ================================================
@@ -50,20 +62,24 @@ To install from source, run:
 License
 ================================================
 
-The source code is licensed under the `GNU General Public License v3.0`_.
+The MIT License (MIT)
 
-Copyright (C) 2016 Cyker Way
+Copyright (c) 2012 Cyker Way
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

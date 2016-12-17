@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 '''
-spotexp - A Spotify playlist exporter.
+spotexp - A Spotify metadata exporter.
 '''
 
 import json
@@ -14,7 +14,7 @@ from os.path import isdir
 from os.path import join
 
 USAGE_TEXT = '''
-spotexp - A Spotify playlist exporter.
+spotexp - A Spotify metadata exporter.
 
 Usage: spotexp <infile> <outdir>
 '''

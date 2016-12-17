@@ -27,7 +27,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='1.1.0',
 
-    description='A Spotify playlist exporter.',
+    description='A Spotify metadata exporter.',
     long_description=long_description,
 
     # The project's main homepage.
@@ -64,7 +64,7 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='spotify audio playlist export',
+    keywords='spotify audio metadata export',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
