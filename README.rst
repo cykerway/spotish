@@ -4,12 +4,12 @@ spotexp
 
 .. default-role:: code
 
-`spotext` is a Spotify metadata exporter.
+`spotexp` is a Spotify metadata exporter.
 
 Intro
 ================================================
 
-`spotext` is a Spotify metadata exporter.
+`spotexp` is a Spotify metadata exporter.
 
 Usage
 ================================================
@@ -36,7 +36,7 @@ Usage
 Output
 ================================================
 
-`spotext` creates a subdir for each track and writes the following files in it:
+`spotexp` creates a subdir for each track and writes the following files in it:
 
 -   `track.json`: Track metadata in JSON format.
 
@@ -62,7 +62,7 @@ To install from source, run:
 Dependency
 ================================================
 
-`spotext` depends on `requests` and `spotipy`. Both can be installed using
+`spotexp` depends on `requests` and `spotipy`. Both can be installed using
 `pip`.
 
 License
