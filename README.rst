@@ -47,7 +47,7 @@ Output
 Install
 ================================================
 
-To install via `pip`, run:
+To install using `pip`, run:
 
 ::
 
@@ -58,6 +58,12 @@ To install from source, run:
 ::
 
     python setup.py install --prefix=/usr
+
+Dependency
+================================================
+
+`spotext` depends on `requests` and `spotipy`. Both can be installed using
+`pip`.
 
 License
 ================================================
