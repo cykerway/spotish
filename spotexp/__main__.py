@@ -38,7 +38,7 @@ def dump(infile, outdir):
     Parameters
     ----------
     infile
-        URL list file.
+        URI list file.
 
     outdir
         Output dir.
