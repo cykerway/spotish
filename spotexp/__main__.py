@@ -21,7 +21,7 @@ Usage: spotexp <list> <output>
 
 def download(infile, outdir):
     '''
-    Download song metadata.
+    Download track metadata.
 
     Parameters
     ----------
@@ -40,17 +40,47 @@ def download(infile, outdir):
 
             print(uri, flush=True)
 
+            # Get track info.
             track = sp.track(uri)
 
-            # Make output dir.
+            # Make output dir for this track.
             uri_dir = join(outdir, uri)
             if not isdir(uri_dir):
                 os.makedirs(uri_dir)
 
-            # Dump song info.
+            # Dump track info in JSON format.
             json_file = join(uri_dir, uri + '.json')
             with open(json_file, 'wt') as fout:
                 json.dump(track, fout, indent=4)
+
+            # Dump simplified track info in TXT format.
+            txt_file = join(uri_dir, uri + '.txt')
+            with open(txt_file, 'wt') as fout:
+                # Write track name.
+                fout.write('name:{}\n'.format(track['name']))
+
+                # Write track artists.
+                for artist in track['artists']:
+                    fout.write('artist:{}\n'.format(artist['name']))
+
+                # Write track album.
+                fout.write('album:{}\n'.format(track['album']['name']))
+
+                # Write track album artists.
+                for artist in track['album']['artists']:
+                    fout.write('album-artist:{}\n'.format(artist['name']))
+
+                # Write track duration.
+                duration_ms = track['duration_ms']
+                duration_hh = duration_ms // 3600000
+                duration_ms -= duration_hh * 3600000
+                duration_mm = duration_ms // 60000
+                duration_ms -= duration_mm * 60000
+                duration_ss = duration_ms // 1000
+                duration_ms -= duration_ss * 1000
+                fout.write('duration:{:02d}:{:02d}:{:02d}.{:03d}\n'.format(
+                    duration_hh, duration_mm, duration_ss, duration_ms
+                ))
 
 def printerr(s=''):
     '''
