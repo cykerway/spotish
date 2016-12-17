@@ -1,102 +1,82 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-# The MIT License (MIT)
-#
-# Copyright (c) 2012 - 2015 Cyker Way
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is furnished
-# to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'''\
-SpotExp - Spotify playlist exporter.
-
-----------------------------------------------------------------
-
-Usage:
-
-1.  Open Spotify and select the songs to export.
-
-2.  Right click the selected songs and choose *Copy Track Link*.
-
-3.  Paste copied links into a text file named `listfile`.
-
-4.  Run `spotexp.py listfile`.
-
-----------------------------------------------------------------
-
-Output format:
-
-    <title>:<artist>:<album>:<duration>
+'''
+spotexp - A Spotify playlist exporter.
 '''
 
 import httplib2
+import json
 import os
-import re
+import spotipy
 import sys
-import urllib
-from lxml import etree
 
-def download(listfile):
-    '''Main download function.'''
+from os.path import isdir
+from os.path import join
 
-    h = httplib2.Http()
+USAGE_TEXT = '''
+spotexp - A Spotify playlist exporter.
 
-    with open(listfile, 'rt') as f:
-        for line in f:
-
-            # url format: http://open.spotify.com/track/xxxxxxxxxxxxxxxxxxxxxx
-            url = line.strip()
-
-            # uri format: xxxxxxxxxxxxxxxxxxxxxx
-            uri = url.split('/')[-1]
-
-            # Download and parse HTML page.
-            r, c = h.request(url, 'GET')
-            if (not r or r.get('status') != '200'):
-                print('HTTP error.')
-                exit(1)
-
-            root = etree.HTML(c)
-
-            # Get song metadata.
-            title = root.xpath('//meta[@property="og:title"]')[0].attrib['content']
-            artist = root.xpath('//a[@class="owner-name hdr-l"]')[0].text
-            album = root.xpath('//a[@class="owner-name hdr-l"]')[1].text
-            duration = root.xpath('//meta[@property="music:duration"]')[0].attrib['content']
-
-            print(':'.join((title, artist, album, duration)), flush=True)
-
-def usage(code):
-    '''Echo usage and exit.'''
-
-    usage_str = \
+Usage: spotexp <list> <output>
 '''
-Spotexp - Export playlists on Spotify.
 
-Usage: spotexp.py <listfile>
-'''
-    print(usage_str)
-    exit(code)
+def download(infile, outdir):
+    '''
+    Download song metadata.
+
+    Parameters
+    ----------
+    infile
+        URL list file.
+
+    outdir
+        Output dir.
+    '''
+    sp = spotipy.Spotify()
+
+    with open(infile, 'rt') as fin:
+        for line in fin:
+            # URI format: spotify:track:xxxxxxxxxxxxxxxxxxxxxx
+            uri = line.strip()
+
+            print(uri, flush=True)
+
+            track = sp.track(uri)
+
+            # Make output dir.
+            uri_dir = join(outdir, uri)
+            if not isdir(uri_dir):
+                os.makedirs(uri_dir)
+
+            # Dump song info.
+            json_file = join(uri_dir, uri + '.json')
+            with open(json_file, 'wt') as fout:
+                json.dump(track, fout, indent=4)
+
+def printerr(s=''):
+    '''
+    Print to stderr.
+    '''
+    print(s, file=sys.stderr, flush=True)
+
+def usage():
+    '''
+    Display usage information.
+    '''
+    printerr(USAGE_TEXT)
+
+def main():
+    '''
+    Main function.
+    '''
+    try:
+        if len(sys.argv) != 3:
+            raise Exception('invalid args')
+        download(sys.argv[1], sys.argv[2])
+    except Exception as e:
+        printerr('Error: {}'.format(e))
+        usage()
+        sys.exit(1)
 
 if __name__ == '__main__':
-
-    if len(sys.argv) != 2:
-        usage(1)
-
-    download(sys.argv[1])
+    main()
 

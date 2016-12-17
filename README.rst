@@ -22,6 +22,15 @@ Usage
 
 4.  Run `spotexp songs.txt`.
 
+Output
+================================================
+
+`spotext` will write, for each song, the following information to standard
+output:
+
+::
+
+    <title>:<artist>:<album>:<duration>
 
 Install
 ================================================
