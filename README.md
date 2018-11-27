@@ -74,7 +74,7 @@ to download saved playlists, use command `playlists` instead of `tracks`:
         --client-id {client_id} --client-secret {client_secret} \
         --redirect-uri {redirect_uri} \
         --output {dir} \
-        --album-image --track-preview \
+        --playlist-image --track-preview \
         --verbose \
         playlists
 
