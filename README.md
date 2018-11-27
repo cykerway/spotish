@@ -34,11 +34,14 @@ to use spotish, you need to create a spotify application:
 
 now we have a spotify username, a client id, a client secret and a redirect uri;
 
-to download saved tracks into the default `tracks` dir:
+### download tracks
+
+to download saved tracks into the default `out` dir:
 
     spotish --user {username} \
         --client-id {client_id} --client-secret {client_secret} \
-        --redirect-uri {redirect_uri}
+        --redirect-uri {redirect_uri} \
+        tracks
 
 on first run, this will open a web browser and ask you to enter the redirect uri
 to authenticate; simply follow the instructions; this will generate a hidden
@@ -60,7 +63,25 @@ to download saved tracks with more complete metadata and helpful progress text:
         --redirect-uri {redirect_uri} \
         --output {dir} \
         --album-image --track-preview \
-        --verbose
+        --verbose \
+        tracks
+
+### download playlists
+
+to download saved playlists, use command `playlists` instead of `tracks`:
+
+    spotish --user {username} \
+        --client-id {client_id} --client-secret {client_secret} \
+        --redirect-uri {redirect_uri} \
+        --output {dir} \
+        --album-image --track-preview \
+        --verbose \
+        playlists
+
+tracks are organized by their playlists, not albums; both playlists and tracks
+are named after their uuids; a playlist uuid contains playlist index, playlist
+uri and playlist name; a track uuid contains track index within the playlist,
+track uri and track name;
 
 ## depend
 
