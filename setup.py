@@ -109,8 +109,8 @@ setup(
     ##
     classifiers=[
         ##  development status;
-        'Development Status :: 3 - Alpha',
-#        'Development Status :: 4 - Beta',
+#        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 #        'Development Status :: 5 - Production/Stable',
 
         ##  intended audience;
