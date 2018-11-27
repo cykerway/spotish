@@ -217,7 +217,7 @@ def save_playlist(args, playlist, playlist_uuid, playlist_dir):
     if args.playlist_image and playlist['images']:
         playlist_img = join(playlist_dir, playlist_uuid + '.jpg')
         if args.verbose:
-            oplog('save playlist img', playlist_uuid)
+            oplog('save playlist image', playlist_uuid)
         resp_ = requests.get(playlist['images'][0]['url'])
         with open(playlist_img, 'wb') as fp:
             fp.write(resp_.content)
@@ -239,7 +239,7 @@ def save_album(args, album, album_uuid, album_dir):
     if args.album_image and album['images']:
         album_img = join(album_dir, album_uuid + '.jpg')
         if args.verbose:
-            oplog('save album img', album_uuid)
+            oplog('save album image', album_uuid)
         resp_ = requests.get(album['images'][0]['url'])
         with open(album_img, 'wb') as fp:
             fp.write(resp_.content)
