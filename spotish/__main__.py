@@ -229,7 +229,7 @@ def main():
     sp = spotipy.Spotify(auth=token)
 
     ##  fetch saved tracks;
-    limit = 20
+    limit = 50
     offset = 0
     while True:
         resp = sp.current_user_saved_tracks(limit=limit, offset=offset)
