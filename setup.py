@@ -1,116 +1,229 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
-"""A setuptools based setup module.
+'''
+setuptools based setup module;
 
-See:
-https://packaging.python.org/en/latest/distributing.html
-https://github.com/pypa/sampleproject
-"""
+see <https://packaging.python.org/en/latest/distributing.html>;
+'''
 
-# Always prefer setuptools over distutils
-from setuptools import setup, find_packages
-# To use a consistent encoding
-from codecs import open
 from os import path
+from setuptools import find_packages
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+##  get long description from readme file;
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='spotexp',
+    ##  ========================================================================
+    ##  required for pypi upload;
+    ##  ========================================================================
 
-    # Versions should comply with PEP440.  For a discussion on single-sourcing
-    # the version across setup.py and the project code, see
-    # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.1.0',
+    ##  project name;
+    ##
+    ##  this determines how users install this project:
+    ##
+    ##      pip install sampleproject
+    ##
+    ##  and where this project lives on pypi:
+    ##
+    ##  <https://pypi.org/project/sampleproject/>
+    ##
+    ##  this name is registered for you the first time you publish this package;
+    ##
+    ##  name specification:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#name>
+    ##
+    name='spotish',
 
-    description='A Spotify metadata exporter.',
-    long_description=long_description,
+    ##  project version;
+    ##
+    ##  version specification (pep 440):
+    ##
+    ##  <https://www.python.org/dev/peps/pep-0440/>;
+    ##
+    ##  single-sourcing techniques:
+    ##
+    ##  <https://packaging.python.org/en/latest/single_source_version.html>
+    ##
+    version='1.0.0',
 
-    # The project's main homepage.
-    url='https://github.com/cykerway/spotexp',
+    ##  project homepage;
+    ##
+    ##  this arg corresponds to "home-page" metadata field:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#home-page-optional>
+    ##
+    url='https://github.com/cykerway/spotish',
 
-    # Author details
+    ##  author name;
     author='Cyker Way',
-    author_email='cykerway at gmail dot com',
 
-    # Choose your license
-    license='MIT',
+    ##  author email address;
+    author_email='cykerway@example.com',
 
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=[
-        # How mature is this project? Common values are
-        #   3 - Alpha
-        #   4 - Beta
-        #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
-
-        # Indicate who your project is intended for
-        'Intended Audience :: End Users/Desktop',
-        'Topic :: Multimedia :: Sound/Audio',
-
-        # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: MIT License',
-
-        # Specify the Python versions you support here. In particular, ensure
-        # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-    ],
-
-    # What does your project relate to?
-    keywords='spotify audio metadata export',
-
-    # You can just specify the packages manually here if your project is
-    # simple. Or you can use find_packages().
+    ##  packages;
+    ##
+    ##  you can provide a list of packages manually or use `find_packages()`;
+    ##
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
-    # Alternatively, if you want to distribute just a my_module.py, uncomment
-    # this:
-    #   py_modules=["my_module"],
+    ##  ========================================================================
+    ##  optional for pypi upload;
+    ##  ========================================================================
 
-    # List run-time dependencies here.  These will be installed by pip when
-    # your project is installed. For an analysis of "install_requires" vs pip's
-    # requirements files see:
-    # https://packaging.python.org/en/latest/requirements.html
-#    install_requires=['peppercorn'],
+    ##  a one-line description;
+    ##
+    ##  this arg corresponds to "summary" metadata field:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#summary>
+    ##
+    description='download saved tracks on spotify;',
 
-    # List additional groups of dependencies here (e.g. development
-    # dependencies). You can install these using the following syntax,
-    # for example:
-    # $ pip install -e .[dev,test]
-#    extras_require={
+    ##  a longer description shown on project homepage on pypi;
+    ##
+    ##  this is often the same as the readme;
+    ##
+    ##  this arg corresponds to "description" metadata field:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#description-optional>
+    ##
+    long_description=long_description,
+
+    ##  longer description content type;
+    ##
+    ##  valid values are: `text/plain`, `text/x-rst`, `text/markdown`;
+    ##
+    ##  this arg corresponds to "description-content-type" metadata field:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#description-content-type-optional>
+    ##
+    long_description_content_type='text/markdown',
+
+    ##  classifiers categorizing this project;
+    ##
+    ##  see <https://pypi.org/classifiers/>;
+    ##
+    classifiers=[
+        ##  development status;
+        'Development Status :: 3 - Alpha',
+#        'Development Status :: 4 - Beta',
+#        'Development Status :: 5 - Production/Stable',
+
+        ##  intended audience;
+#        'Intended Audience :: Developers',
+        'Intended Audience :: End Users/Desktop',
+
+        ##  topic;
+#        'Topic :: Desktop Environment',
+#        'Topic :: Games/Entertainment',
+        'Topic :: Multimedia',
+#        'Topic :: Office/Business',
+#        'Topic :: Scientific/Engineering',
+#        'Topic :: Software Development',
+#        'Topic :: System',
+
+        ##  license;
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+#        'License :: OSI Approved :: BSD License',
+#        'License :: OSI Approved :: MIT License',
+
+        ##  supported python versions;
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ],
+
+    ##  project keywords;
+    ##
+    ##  these keywords will appear on the project page;
+    ##
+    keywords='spotify music',
+
+    ##  package data;
+    ##
+    ##  this is a dict mapping package names to a list of relative path names
+    ##  (or glob patterns) that should be copied into the package when
+    ##  installed; the path names are interpreted relative to the package dir;
+    ##
+    package_data={
+#        'sample': ['*.bin'],
+    },
+
+    ##  additional data files;
+    ##
+    ##  this is a sequence of `(dir, files)` pairs; each `(dir, files)` pair
+    ##  specifies the install dir and the files to install there; if `dir` is a
+    ##  relative path, it is relative to the install prefix (`sys.prefix` or
+    ##  `sys.exec_prefix`); each file in `files` is interpreted relative to the
+    ##  `setup.py` script;
+    ##
+    ##  see <https://docs.python.org/3/distutils/setupscript.html#installing-additional-files>;
+    ##
+    data_files=[
+#        ('data_files', ['data/data0.bin', 'data/data1.bin']),
+    ],
+
+    ##  package dependencies;
+    ##
+    ##  this is a list of packages that this project depends on; these packages
+    ##  will be installed by pip when this project is installed;
+    ##
+    install_requires=[
+#        'numpy',
+#        'scipy',
+    ],
+
+    ##  extra package dependencies;
+    ##
+    ##  this is a dict mapping extras (optional features of this project) to a
+    ##  list of packages that those extras depend on;
+    ##
+    ##  users will be able to install these using the extras syntax:
+    ##
+    ##      pip install sampleproject[dev]
+    ##
+    ##  see <https://setuptools.readthedocs.io/en/latest/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies>
+    ##
+    extras_require={
 #        'dev': ['check-manifest'],
 #        'test': ['coverage'],
-#    },
+    },
 
-    # If there are data files included in your packages that need to be
-    # installed, specify them here.  If using Python 2.6 or less, then these
-    # have to be included in MANIFEST.in as well.
-#    package_data={
-#        'sample': ['package_data.dat'],
-#    },
-
-    # Although 'package_data' is the preferred approach, in some case you may
-    # need to place data files outside of your packages. See:
-    # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
-    # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-#    data_files=[('share/spotexp', [
-#        'share/spotexp.conf.example',
-#        'share/blacklist.example',
-#    ])],
-
-    # To provide executable scripts, use entry points in preference to the
-    # "scripts" keyword. Entry points provide cross-platform support and allow
-    # pip to create the appropriate form of executable for the target platform.
+    ##  to create executable scripts, use entry points:
+    ##
+    ##  <https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation>
+    ##
+    ##  for example, the following would provide a console script `sample-cli`
+    ##  which executes the `main` function in package `sample.cli`, and a gui
+    ##  script `sample-gui` which executes the `main` function in package
+    ##  `sample.gui`;
     entry_points={
         'console_scripts': [
-            'spotexp=spotexp.__main__:main',
+            'spotish=spotish.__main__:main',
         ],
+#        'gui_scripts': [
+#            'sample-gui=sample.gui:main',
+#        ],
+    },
+
+    ##  additional urls that are relevant to this project;
+    ##
+    ##  examples include: where the package tracks issues, where the source is
+    ##  hosted, where to say thanks to the package maintainers, and where to
+    ##  support the project financially; the keys are used to render the link
+    ##  texts on pypi;
+    ##
+    ##  this arg corresponds to "project-url" metadata fields:
+    ##
+    ##  <https://packaging.python.org/specifications/core-metadata/#project-url-multiple-use>
+    ##
+    project_urls={
+#        'Bug Reports': 'https://github.com/cykerway/spotish/issues',
+#        'Funding': 'https://donate.pypi.org',
+#        'Say Thanks!': 'http://saythanks.io/to/example',
+        'Source': 'https://github.com/cykerway/spotish',
     },
 )
