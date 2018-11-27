@@ -178,55 +178,24 @@ def parse_args():
         help='enable verbose mode;',
     )
 
+    ##  add arg;
+    parser.add_argument(
+        'command',
+        type=str,
+        metavar='{cmd}',
+        help='command;',
+    )
+
     ##  parse args;
     args = parser.parse_args()
 
     return args
 
-def main():
+def download_saved_tracks(sp, args):
 
     '''
-    main function;
+    download saved tracks;
     '''
-
-    ##  parse args;
-    args = parse_args()
-
-    if args.user is None:
-        die('no user;')
-
-    if args.client_id is None:
-        die('no client id;')
-
-    if args.client_secret is None:
-        die('no client secret;')
-
-    if args.redirect_uri is None:
-        die('no redirect uri;')
-
-    if args.output is None:
-        die('no output dir;')
-
-    ##  request access token;
-    scope = ' '.join([
-        'playlist-read-collaborative',
-        'playlist-read-private',
-        'user-library-read',
-    ])
-
-    token = spotipy.util.prompt_for_user_token(
-        args.user,
-        scope,
-        client_id=args.client_id,
-        client_secret=args.client_secret,
-        redirect_uri=args.redirect_uri,
-    )
-
-    if token is None:
-        die('cannot get token for {}'.format(args.user))
-
-    ##  create spotipy client;
-    sp = spotipy.Spotify(auth=token)
 
     ##  fetch saved tracks;
     limit = 50
@@ -305,6 +274,150 @@ def main():
 
         ##  fetch next page;
         offset += limit
+
+def download_playlist_tracks(sp, args, playlist_id, playlist_dir):
+
+    '''
+    download playlist tracks;
+    '''
+
+    limit = 50
+    offset = 0
+    while True:
+        resp = sp.user_playlist_tracks(
+            args.user, playlist_id, limit=limit, offset=offset)
+
+        ##  break when no more items;
+        if len(resp['items']) == 0: break
+
+        ##  dump raw json in debug mode;
+        if args.debug:
+            print(json.dumps(resp, indent=4))
+
+        for i, item in enumerate(resp['items']):
+
+            ##  get track;
+            track = item['track']
+
+            ##  make track uuid;
+            track_uuid = '{:02d}:{}:{}'.format(
+                i + 1, track['uri'], track['name'])
+
+            ##  make track dir;
+            track_dir = join(playlist_dir, track_uuid)
+            os.makedirs(track_dir, exist_ok=True)
+
+            ##  save track json;
+            track_json = join(track_dir, track_uuid + '.json')
+            if args.verbose:
+                oplog('save track', track_uuid)
+            with open(track_json, 'wt') as fp:
+                json.dump(track, fp, indent=4)
+
+            ##  save track preview;
+            if args.track_preview and track['preview_url']:
+                track_preview = join(track_dir, track_uuid + '.mp3')
+                if args.verbose:
+                    oplog('save track preview', track_uuid)
+                resp_ = requests.get(track['preview_url'])
+                with open(track_preview, 'wb') as fp:
+                    fp.write(resp_.content)
+
+        ##  fetch next page;
+        offset += limit
+
+def download_playlists(sp, args):
+
+    '''
+    download playlists;
+    '''
+
+    limit = 50
+    offset = 0
+    while True:
+        resp = sp.current_user_playlists(limit=limit, offset=offset)
+
+        ##  break when no more items;
+        if len(resp['items']) == 0: break
+
+        ##  dump raw json in debug mode;
+        if args.debug:
+            print(json.dumps(resp, indent=4))
+
+        for i, playlist in enumerate(resp['items']):
+            ##  make playlist uuid;
+            playlist_uuid = '{:02d}:{}:{}'.format(
+                i + 1, playlist['uri'], playlist['name'])
+
+            ##  make playlist dir;
+            playlist_dir = join(args.output, playlist_uuid)
+            os.makedirs(playlist_dir, exist_ok=True)
+
+            ##  save playlist json;
+            playlist_json = join(playlist_dir, playlist_uuid + '.json')
+            if args.verbose:
+                oplog('save playlist', playlist_uuid)
+            with open(playlist_json, 'wt') as fp:
+                json.dump(playlist, fp, indent=4)
+
+            ##  download playlist tracks;
+            download_playlist_tracks(sp, args, playlist['id'], playlist_dir)
+
+        ##  fetch next page;
+        offset += limit
+
+def main():
+
+    '''
+    main function;
+    '''
+
+    ##  parse args;
+    args = parse_args()
+
+    if args.user is None:
+        die('no user;')
+
+    if args.client_id is None:
+        die('no client id;')
+
+    if args.client_secret is None:
+        die('no client secret;')
+
+    if args.redirect_uri is None:
+        die('no redirect uri;')
+
+    if args.output is None:
+        die('no output dir;')
+
+    ##  request access token;
+    scope = ' '.join([
+        'playlist-read-collaborative',
+        'playlist-read-private',
+        'user-library-read',
+    ])
+
+    token = spotipy.util.prompt_for_user_token(
+        args.user,
+        scope,
+        client_id=args.client_id,
+        client_secret=args.client_secret,
+        redirect_uri=args.redirect_uri,
+    )
+
+    if token is None:
+        die('cannot get token for {}'.format(args.user))
+
+    ##  create spotipy client;
+    sp = spotipy.Spotify(auth=token)
+
+    ##  download;
+    if args.command == 'saved_tracks':
+        download_saved_tracks(sp, args)
+    elif args.command == 'playlists':
+        download_playlists(sp, args)
+    else:
+        die('unknown command;')
 
 if __name__ == '__main__':
     main()
