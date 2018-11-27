@@ -1,6 +1,6 @@
 # spotish
 
-download saved tracks on spotify;
+download tracks and playlists on spotify;
 
 ## install
 

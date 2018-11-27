@@ -81,7 +81,7 @@ setup(
     ##
     ##  <https://packaging.python.org/specifications/core-metadata/#summary>
     ##
-    description='download saved tracks on spotify;',
+    description='download tracks and playlists on spotify;',
 
     ##  a longer description shown on project homepage on pypi;
     ##

@@ -96,8 +96,8 @@ def parse_args():
     ##  init arg parser;
     parser = argparse.ArgumentParser(
         prog=prog,
-        usage='{} [options]'.format(prog),
-        description='download saved tracks on spotify;',
+        usage='{} [options] {{cmd}}'.format(prog),
+        description='download tracks and playlists on spotify;',
         formatter_class=help_formatter,
         add_help=False,
     )
@@ -145,9 +145,9 @@ def parse_args():
     parser.add_argument(
         '-o', '--output',
         type=str,
-        default='tracks',
+        default='out',
         metavar='{dir}',
-        help='output dir (default=tracks);',
+        help='output dir (default: out);',
     )
 
     ##  add arg;
@@ -183,7 +183,8 @@ def parse_args():
         'command',
         type=str,
         metavar='{cmd}',
-        help='command;',
+        choices=['tracks', 'playlists'],
+        help='command: [tracks, playlists];',
     )
 
     ##  parse args;
@@ -412,7 +413,7 @@ def main():
     sp = spotipy.Spotify(auth=token)
 
     ##  download;
-    if args.command == 'saved_tracks':
+    if args.command == 'tracks':
         download_saved_tracks(sp, args)
     elif args.command == 'playlists':
         download_playlists(sp, args)
