@@ -192,6 +192,50 @@ def parse_args():
 
     return args
 
+def save_album(args, album, album_uuid, album_dir):
+
+    '''
+    save album;
+    '''
+
+    ##  save album json;
+    album_json = join(album_dir, album_uuid + '.json')
+    if args.verbose:
+        oplog('save album', album_uuid)
+    with open(album_json, 'wt') as fp:
+        json.dump(album, fp, indent=4)
+
+    ##  save album image;
+    if args.album_image and album['images']:
+        album_img = join(album_dir, album_uuid + '.jpg')
+        if args.verbose:
+            oplog('save album img', album_uuid)
+        resp_ = requests.get(album['images'][0]['url'])
+        with open(album_img, 'wb') as fp:
+            fp.write(resp_.content)
+
+def save_track(args, track, track_uuid, track_dir):
+
+    '''
+    save track;
+    '''
+
+    ##  save track json;
+    track_json = join(track_dir, track_uuid + '.json')
+    if args.verbose:
+        oplog('save track', track_uuid)
+    with open(track_json, 'wt') as fp:
+        json.dump(track, fp, indent=4)
+
+    ##  save track preview;
+    if args.track_preview and track['preview_url']:
+        track_preview = join(track_dir, track_uuid + '.mp3')
+        if args.verbose:
+            oplog('save track preview', track_uuid)
+        resp_ = requests.get(track['preview_url'])
+        with open(track_preview, 'wb') as fp:
+            fp.write(resp_.content)
+
 def download_saved_tracks(sp, args):
 
     '''
@@ -237,41 +281,15 @@ def download_saved_tracks(sp, args):
             if album['uri'] not in album_cache:
                 album_cache.add(album['uri'])
 
-                ##  save album json;
-                album_json = join(album_dir, album_uuid + '.json')
-                if args.verbose:
-                    oplog('save album', album_uuid)
-                with open(album_json, 'wt') as fp:
-                    json.dump(album, fp, indent=4)
-
-                ##  save album image;
-                if args.album_image and album['images']:
-                    album_img = join(album_dir, album_uuid + '.jpg')
-                    if args.verbose:
-                        oplog('save album img', album_uuid)
-                    resp_ = requests.get(album['images'][0]['url'])
-                    with open(album_img, 'wb') as fp:
-                        fp.write(resp_.content)
+                ##  save album;
+                save_album(args, album, album_uuid, album_dir)
 
             ##  save track;
             if track['uri'] not in track_cache:
                 track_cache.add(track['uri'])
 
-                ##  save track json;
-                track_json = join(track_dir, track_uuid + '.json')
-                if args.verbose:
-                    oplog('save track', track_uuid)
-                with open(track_json, 'wt') as fp:
-                    json.dump(track, fp, indent=4)
-
-                ##  save track preview;
-                if args.track_preview and track['preview_url']:
-                    track_preview = join(track_dir, track_uuid + '.mp3')
-                    if args.verbose:
-                        oplog('save track preview', track_uuid)
-                    resp_ = requests.get(track['preview_url'])
-                    with open(track_preview, 'wb') as fp:
-                        fp.write(resp_.content)
+                ##  save track;
+                save_track(args, track, track_uuid, track_dir)
 
         ##  fetch next page;
         offset += limit
@@ -308,21 +326,8 @@ def download_playlist_tracks(sp, args, playlist_id, playlist_dir):
             track_dir = join(playlist_dir, track_uuid)
             os.makedirs(track_dir, exist_ok=True)
 
-            ##  save track json;
-            track_json = join(track_dir, track_uuid + '.json')
-            if args.verbose:
-                oplog('save track', track_uuid)
-            with open(track_json, 'wt') as fp:
-                json.dump(track, fp, indent=4)
-
-            ##  save track preview;
-            if args.track_preview and track['preview_url']:
-                track_preview = join(track_dir, track_uuid + '.mp3')
-                if args.verbose:
-                    oplog('save track preview', track_uuid)
-                resp_ = requests.get(track['preview_url'])
-                with open(track_preview, 'wb') as fp:
-                    fp.write(resp_.content)
+            ##  save track;
+            save_track(args, track, track_uuid, track_dir)
 
         ##  fetch next page;
         offset += limit
