@@ -152,6 +152,13 @@ def parse_args():
 
     ##  add arg;
     parser.add_argument(
+        '--track-preview',
+        action='store_true',
+        help='download track preview;',
+    )
+
+    ##  add arg;
+    parser.add_argument(
         '--album-image',
         action='store_true',
         help='download album image;',
@@ -159,9 +166,9 @@ def parse_args():
 
     ##  add arg;
     parser.add_argument(
-        '--track-preview',
+        '--playlist-image',
         action='store_true',
-        help='download track preview;',
+        help='download playlist image;',
     )
 
     ##  add arg;
@@ -192,6 +199,28 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+def save_playlist(args, playlist, playlist_uuid, playlist_dir):
+
+    '''
+    save playlist;
+    '''
+
+    ##  save playlist json;
+    playlist_json = join(playlist_dir, playlist_uuid + '.json')
+    if args.verbose:
+        oplog('save playlist', playlist_uuid)
+    with open(playlist_json, 'wt') as fp:
+        json.dump(playlist, fp, indent=4)
+
+    ##  save playlist image;
+    if args.playlist_image and playlist['images']:
+        playlist_img = join(playlist_dir, playlist_uuid + '.jpg')
+        if args.verbose:
+            oplog('save playlist img', playlist_uuid)
+        resp_ = requests.get(playlist['images'][0]['url'])
+        with open(playlist_img, 'wb') as fp:
+            fp.write(resp_.content)
 
 def save_album(args, album, album_uuid, album_dir):
 
@@ -360,12 +389,8 @@ def download_playlists(sp, args):
             playlist_dir = join(args.output, playlist_uuid)
             os.makedirs(playlist_dir, exist_ok=True)
 
-            ##  save playlist json;
-            playlist_json = join(playlist_dir, playlist_uuid + '.json')
-            if args.verbose:
-                oplog('save playlist', playlist_uuid)
-            with open(playlist_json, 'wt') as fp:
-                json.dump(playlist, fp, indent=4)
+            ##  save playlist;
+            save_playlist(args, playlist, playlist_uuid, playlist_dir)
 
             ##  download playlist tracks;
             download_playlist_tracks(sp, args, playlist['id'], playlist_dir)
