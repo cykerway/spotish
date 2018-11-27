@@ -179,12 +179,13 @@ def parse_args():
     )
 
     ##  add arg;
+    choices = ['tracks', 'playlists']
     parser.add_argument(
         'command',
         type=str,
         metavar='{cmd}',
-        choices=['tracks', 'playlists'],
-        help='command: [tracks, playlists];',
+        choices=choices,
+        help='command: {};'.format(', '.join(choices)),
     )
 
     ##  parse args;
