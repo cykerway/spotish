@@ -62,7 +62,7 @@ to download saved tracks with more complete metadata and helpful progress text:
         --album-image --track-preview \
         --verbose
 
-### options
+### option
 
 to specify output dir:
 
