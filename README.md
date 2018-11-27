@@ -62,27 +62,27 @@ to download saved tracks with more complete metadata and helpful progress text:
         --album-image --track-preview \
         --verbose
 
-### option
+spotish offers the following options:
 
-to specify output dir:
+-   to specify output dir:
 
-    --output {dir}
+        --output {dir}
 
-to download album image:
+-   to download album image:
 
-    --album-image
+        --album-image
 
-to download track preview:
+-   to download track preview:
 
-    --track-preview
+        --track-preview
 
-to dump raw json response:
+-   to dump raw json response:
 
-    --debug
+        --debug
 
-to display more information:
+-   to display more information:
 
-    --verbose
+        --verbose
 
 ## depend
 
