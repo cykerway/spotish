@@ -49,7 +49,6 @@ def parse_args():
     ##  init arg parser;
     parser = argparse.ArgumentParser(
         prog=prog,
-        usage='{} [options] {{cmd}}'.format(prog),
         description='download tracks and playlists on spotify;',
         formatter_class=argparse_better.HelpFormatter,
         add_help=False,
@@ -66,7 +65,7 @@ def parse_args():
     parser.add_argument(
         '-u', '--user',
         type=str,
-        metavar='{user}',
+        metavar='user',
         help='spotify username;',
     )
 
@@ -74,7 +73,7 @@ def parse_args():
     parser.add_argument(
         '-i', '--client-id',
         type=str,
-        metavar='{id}',
+        metavar='id',
         help='client id;',
     )
 
@@ -82,7 +81,7 @@ def parse_args():
     parser.add_argument(
         '-s', '--client-secret',
         type=str,
-        metavar='{secret}',
+        metavar='secret',
         help='client secret;',
     )
 
@@ -90,7 +89,7 @@ def parse_args():
     parser.add_argument(
         '-r', '--redirect-uri',
         type=str,
-        metavar='{uri}',
+        metavar='uri',
         help='redirect uri;',
     )
 
@@ -99,7 +98,7 @@ def parse_args():
         '-o', '--output',
         type=str,
         default='out',
-        metavar='{dir}',
+        metavar='dir',
         help='output dir (default: out);',
     )
 
@@ -143,7 +142,7 @@ def parse_args():
     parser.add_argument(
         'command',
         type=str,
-        metavar='{cmd}',
+        metavar='cmd',
         choices=choices,
         help='command: {};'.format(', '.join(choices)),
     )
