@@ -6,7 +6,7 @@ main module;
 
 from os.path import join
 import argparse
-import argparse_better
+import argparse_ext
 import json
 import os
 import requests
@@ -50,7 +50,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         prog=prog,
         description='download tracks and playlists on spotify;',
-        formatter_class=argparse_better.HelpFormatter,
+        formatter_class=argparse_ext.HelpFormatter,
         add_help=False,
     )
 

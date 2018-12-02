@@ -49,7 +49,7 @@ setup(
     ##
     ##  <https://packaging.python.org/en/latest/single_source_version.html>
     ##
-    version='1.2.1',
+    version='1.2.2',
 
     ##  project homepage;
     ##
@@ -172,7 +172,7 @@ setup(
     ##  will be installed by pip when this project is installed;
     ##
     install_requires=[
-        'argparse-better',
+        'argparse-ext',
         'spotipy',
     ],
 
