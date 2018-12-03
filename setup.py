@@ -173,6 +173,7 @@ setup(
     ##
     install_requires=[
         'argparse-ext',
+        'logging-ext',
         'spotipy',
     ],
 

@@ -8,6 +8,7 @@ from os.path import join
 import argparse
 import argparse_ext
 import json
+import logging_ext as logging
 import os
 import requests
 import spotipy
@@ -38,7 +39,7 @@ def oplog(op_name, op_msg):
     log an operation;
     '''
 
-    print('[{:20s}]{}'.format(op_name, op_msg), flush=True)
+    logging.v('[{:20s}]{}'.format(op_name, op_msg))
 
 def parse_args():
 
@@ -144,7 +145,7 @@ def parse_args():
         type=str,
         metavar='cmd',
         choices=choices,
-        help='command: {};'.format(', '.join(choices)),
+        help='command ({});'.format(', '.join(choices)),
     )
 
     ##  parse args;
@@ -160,16 +161,14 @@ def save_playlist(args, playlist, playlist_uuid, playlist_dir):
 
     ##  save playlist json;
     playlist_json = join(playlist_dir, playlist_uuid + '.json')
-    if args.verbose:
-        oplog('save playlist', playlist_uuid)
+    oplog('save playlist', playlist_uuid)
     with open(playlist_json, 'wt') as fp:
         json.dump(playlist, fp, indent=4)
 
     ##  save playlist image;
     if args.playlist_image and playlist['images']:
         playlist_img = join(playlist_dir, playlist_uuid + '.jpg')
-        if args.verbose:
-            oplog('save playlist image', playlist_uuid)
+        oplog('save playlist image', playlist_uuid)
         resp_ = requests.get(playlist['images'][0]['url'])
         with open(playlist_img, 'wb') as fp:
             fp.write(resp_.content)
@@ -182,16 +181,14 @@ def save_album(args, album, album_uuid, album_dir):
 
     ##  save album json;
     album_json = join(album_dir, album_uuid + '.json')
-    if args.verbose:
-        oplog('save album', album_uuid)
+    oplog('save album', album_uuid)
     with open(album_json, 'wt') as fp:
         json.dump(album, fp, indent=4)
 
     ##  save album image;
     if args.album_image and album['images']:
         album_img = join(album_dir, album_uuid + '.jpg')
-        if args.verbose:
-            oplog('save album image', album_uuid)
+        oplog('save album image', album_uuid)
         resp_ = requests.get(album['images'][0]['url'])
         with open(album_img, 'wb') as fp:
             fp.write(resp_.content)
@@ -204,16 +201,14 @@ def save_track(args, track, track_uuid, track_dir):
 
     ##  save track json;
     track_json = join(track_dir, track_uuid + '.json')
-    if args.verbose:
-        oplog('save track', track_uuid)
+    oplog('save track', track_uuid)
     with open(track_json, 'wt') as fp:
         json.dump(track, fp, indent=4)
 
     ##  save track preview;
     if args.track_preview and track['preview_url']:
         track_preview = join(track_dir, track_uuid + '.mp3')
-        if args.verbose:
-            oplog('save track preview', track_uuid)
+        oplog('save track preview', track_uuid)
         resp_ = requests.get(track['preview_url'])
         with open(track_preview, 'wb') as fp:
             fp.write(resp_.content)
@@ -233,9 +228,16 @@ def download_saved_tracks(sp, args):
         ##  break when no more items;
         if len(resp['items']) == 0: break
 
-        ##  dump raw json in debug mode;
+        ##  config logger;
         if args.debug:
-            print(json.dumps(resp, indent=4))
+            logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+        elif args.verbose:
+            logging.basicConfig(level=logging.VERBOSE, format='%(message)s')
+        else:
+            logging.basicConfig(format='%(message)s')
+
+        ##  dump raw json;
+        logging.d(json.dumps(resp, indent=4))
 
         for item in resp['items']:
             ##  get track and album;
@@ -291,9 +293,7 @@ def download_playlist_tracks(sp, args, playlist_id, playlist_dir):
         ##  break when no more items;
         if len(resp['items']) == 0: break
 
-        ##  dump raw json in debug mode;
-        if args.debug:
-            print(json.dumps(resp, indent=4))
+        logging.d(json.dumps(resp, indent=4))
 
         for i, item in enumerate(resp['items']):
 
@@ -328,9 +328,7 @@ def download_playlists(sp, args):
         ##  break when no more items;
         if len(resp['items']) == 0: break
 
-        ##  dump raw json in debug mode;
-        if args.debug:
-            print(json.dumps(resp, indent=4))
+        logging.d(json.dumps(resp, indent=4))
 
         for i, playlist in enumerate(resp['items']):
             ##  make playlist uuid;
