@@ -45,7 +45,7 @@ to download saved tracks into the default `out` dir:
 
 on first run, this will open a web browser and ask you to enter the redirect uri
 to authenticate; simply follow the instructions; this will generate a hidden
-cache file named `.cache-<username>` in current dir, containing spotify web api
+cache file named `.cache-{username}` in current dir, containing spotify web api
 access token; later runs of spotish dont need authentication until the access
 token expires;
 
