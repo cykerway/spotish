@@ -8,7 +8,8 @@ from os.path import join
 import argparse
 import argparse_ext
 import json
-import logging_ext as logging
+import logging
+import logging_ext
 import os
 import requests
 import spotipy
@@ -23,6 +24,13 @@ album_cache = set()
 
 ##  track cache;
 track_cache = set()
+
+##  logger;
+logger = logging_ext.getLogger(__name__)
+handler = logging.StreamHandler()
+logger.addHandler(handler)
+formatter = logging.Formatter('%(message)s')
+handler.setFormatter(formatter)
 
 def die(msg):
 
@@ -39,7 +47,7 @@ def oplog(op_name, op_msg):
     log an operation;
     '''
 
-    logging.v('[{:20s}]{}'.format(op_name, op_msg))
+    logger.v('[{:20s}]{}'.format(op_name, op_msg))
 
 def parse_args():
 
@@ -230,14 +238,14 @@ def download_saved_tracks(sp, args):
 
         ##  config logger;
         if args.debug:
-            logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+            logger.setLevel(logging_ext.DEBUG)
         elif args.verbose:
-            logging.basicConfig(level=logging.VERBOSE, format='%(message)s')
+            logger.setLevel(logging_ext.VERBOSE)
         else:
-            logging.basicConfig(format='%(message)s')
+            pass
 
         ##  dump raw json;
-        logging.d(json.dumps(resp, indent=4))
+        logger.d(json.dumps(resp, indent=4))
 
         for item in resp['items']:
             ##  get track and album;
@@ -293,7 +301,7 @@ def download_playlist_tracks(sp, args, playlist_id, playlist_dir):
         ##  break when no more items;
         if len(resp['items']) == 0: break
 
-        logging.d(json.dumps(resp, indent=4))
+        logger.d(json.dumps(resp, indent=4))
 
         for i, item in enumerate(resp['items']):
 
@@ -328,7 +336,7 @@ def download_playlists(sp, args):
         ##  break when no more items;
         if len(resp['items']) == 0: break
 
-        logging.d(json.dumps(resp, indent=4))
+        logger.d(json.dumps(resp, indent=4))
 
         for i, playlist in enumerate(resp['items']):
             ##  make playlist uuid;
